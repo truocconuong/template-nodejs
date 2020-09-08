@@ -1,9 +1,8 @@
 const { Sequelize } = require('sequelize');
-const config = require('../../config')
 function initDB() {
-    const sequelize = new Sequelize(config.database.scheme, config.database.username, config.database.password, {
-        host: config.database.localhost,
-        dialect: config.database.dialect,
+    const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+        host: process.env.DB_HOST,
+        dialect: process.env.DB_DIALECT,
     });
     sequelize
         .authenticate()
