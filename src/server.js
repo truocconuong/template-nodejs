@@ -6,13 +6,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const config = require('../config');
 const router = require('./routes/api/v1');
+const { initDB } = require('./common/DatabaseConnect');
+initDB();
 
-app.use('/api/v1', router)
+app.use('/api/v1', router);
 
 app.get('/', (req, res) => {
   res.json({ successed: true });
 })
 
 
-
 app.listen(config.app.port, () => console.info(`App listening on port ${config.app.port}!`));
+
+
