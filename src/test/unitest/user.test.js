@@ -41,7 +41,7 @@ describe('Test endpoint users', function () {
         getTokenUser.then((token) => {
             chai.request(server).get('/api/v1/admin/users').set({ "Authorization": token }).end(function (error, res) {
                 res.should.have.status(200);
-                res.body.should.to.be.an('array')
+                res.body.data.should.to.be.an('array')
                 done();
             })
         })
