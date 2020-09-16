@@ -6,7 +6,7 @@ const { getUserName, getPassword, register, login, removeAllUser } = require('..
 chai.use(chaiHttp);
 describe('Test endpoint users', function () {
     beforeEach(async function () {
-        await removeAllUser()
+        await removeAllUser();
     });
     it('Should return a new user', function (done) {
         const data = {

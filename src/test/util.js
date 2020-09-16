@@ -38,8 +38,12 @@ async function removeAllUser() {
         await user.destroy()
     }
 }
+function isDuplicateProducts(products) {
+    return new Set(products).size !== products.length;
+}
 
 module.exports = {
+    isDuplicateProducts,
     removeAllUser,
     login,
     register,

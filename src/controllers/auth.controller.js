@@ -51,7 +51,6 @@ function checkAuthentication(req, res, next) {
 
 }
 
-
 module.exports = {
     checkAuthentication,
     register,
