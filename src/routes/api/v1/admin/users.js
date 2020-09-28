@@ -7,6 +7,7 @@ const Auth = controller.Auth;
 
 
 
-router.get('/',Auth.checkAuthentication,User.getAllUser);
+router.get('/', User.getAllUser);
+router.get('/products', User.getProductsUser)
 
 module.exports = router;

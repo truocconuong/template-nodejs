@@ -2,7 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 const server = require('../../server');
-const { getUserName, getPassword, register, login, removeAllUser } = require('../util');
+const { getUserName, getPassword, register, login, removeAllUser, isDuplicateProducts } = require('../util');
 chai.use(chaiHttp);
 describe('Test endpoint users', function () {
     beforeEach(async function () {
@@ -43,6 +43,18 @@ describe('Test endpoint users', function () {
                 res.should.have.status(200);
                 res.body.data.should.to.be.an('array')
                 done();
+            })
+        })
+    })
+
+    it('Should return all products of user', function (done) {
+        const getTokenUser = login();
+        getTokenUser.then((token) => {
+            chai.request(server).get('/api/v1/admin/users/products').set({ "Authorization": token }).end(function (error, res) {
+                res.should.have.status(200);
+                res.body.data.should.to.be.an('array')
+                should.equal(isDuplicateProducts(res.body.data), false)
+                done()
             })
         })
     })

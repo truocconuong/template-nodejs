@@ -1,8 +1,8 @@
 const chai = require('chai');
 const expect = chai.expect;
 const should = chai.should()
-const { answerOfUser } = require('../../common/mock/answer_user');
-const { questions } = require('../../common/mock/question');
+const { answerOfUser } = require('../mock/answer_user');
+const { questions } = require('../mock/question');
 const { matrixGenerateProduct } = require('../../common/util');
 const { isDuplicateProducts } = require('../util');
 describe('Test matrix', function () {
