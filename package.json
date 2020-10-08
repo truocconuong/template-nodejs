@@ -4,9 +4,7 @@
   "description": "",
   "main": "server",
   "scripts": {
-    "start": "nodemon src/server.js",
-    "migrate": "sequelize db:migrate",
-    "test": "cross-env NODE_ENV=test mocha src/test/unitest/*.js --sort --timeout 6000 --exit"
+    "start": "nodemon src/server.js"
   },
   "author": "Chu Huu Manh",
   "license": "ISC",

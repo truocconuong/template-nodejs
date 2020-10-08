@@ -1,0 +1,20 @@
+version: "3.4"
+
+services:
+
+  mysql:
+    image: mysql
+    container_name: test-mysql
+    ports:
+      - 6603:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootpass"
+      MYSQL_DATABASE: "template-nodejs"
+      MYSQL_USER: "devmanh"
+      MYSQL_PASSWORD: "PASSWORD"
+  app:
+    image: template/template_nodejs:v1
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    env_file: .env

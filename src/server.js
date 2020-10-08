@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const router = require('./routes/api/v1');
 const { strategy } = require('./app/passport');
 const passport = require('passport');
+const User = require('./models/users');
+const { UserRepository } = require('./app/Repositories/UserRepository');
 
 
 
@@ -35,5 +37,12 @@ app.listen(process.env.PORT, () => console.info(`App listening on port ${process
 
 
 
+
+app.get('/checker', async (req, res) => {
+  const repository = new UserRepository();
+  console.log('query', req.query)
+  const result = await repository.paginate({ page: 1, pageSize: 1 });
+  res.json(result)
+})
 
 module.exports = app
