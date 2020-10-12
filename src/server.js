@@ -7,6 +7,7 @@ const { strategy } = require('./app/passport');
 const passport = require('passport');
 const User = require('./models/users');
 const { UserRepository } = require('./app/Repositories/UserRepository');
+const Product = require('./models/Products');
 
 
 
@@ -40,9 +41,13 @@ app.listen(process.env.PORT, () => console.info(`App listening on port ${process
 
 app.get('/checker', async (req, res) => {
   const repository = new UserRepository();
-  console.log('query', req.query)
-  const result = await repository.paginate({ page: 1, pageSize: 1 });
+  repository.searchQueryParams(req.query);
+  const result = await repository.get();
   res.json(result)
 })
+
+
+const userRepository = new UserRepository();
+
 
 module.exports = app

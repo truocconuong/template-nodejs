@@ -1,5 +1,6 @@
 const sequelize = require('../config/sequelize').sequelize;
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
+const Product = require('./Products');
 const User = sequelize.define('user', {
   username: {
     type: Sequelize.STRING,
@@ -9,5 +10,17 @@ const User = sequelize.define('user', {
   },
 });
 
+
+
+User.hasMany(Product, {
+  foreignKey: 'user_id'
+})
+
+
+User.addScope('name', {
+  include: [
+    { model: Product }
+  ]
+})
 
 module.exports = User;
