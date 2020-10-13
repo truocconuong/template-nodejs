@@ -7,10 +7,9 @@ class Repository {
         this.model = model;
     }
     get() {
-
-       const operators = this.builder.getAllOperators();
-       console.log(operators)
-        return this.model.findAll({where : operators.condition, relations : operators.include , order : operators.order , limit : operators.limit});
+        const operators = this.builder.getAllOperators();
+        console.log('is limit',operators.limit)
+        return this.model.findAll({ where: operators.condition, include: operators.include, order: operators.order, limit: operators.limit });
     }
 
     async findById(id) {
@@ -45,12 +44,16 @@ class Repository {
         return this
     }
 
+    includeEntity(params) {
+        this.builder.includeEntity(params)
+    }
 
     async paginate() {
-        const offset = (this.page - 1) * this.pamygeSize;
-        const limit = this.pageSize;
+        const operators = this.builder.getAllOperators();
+        const offset = (operators.page - 1) * operators.pageSize;
+        const limit = operators.pageSize;
         const param = {
-            where: this.condition, relations: this.include, order: this.order, limit, offset
+            where: operators.condition, relations: operators.include, order: operators.order, limit, offset
         };
         const result = await this.model.findAndCountAll(param);
         return result
@@ -68,22 +71,21 @@ class Repository {
     }
 
     with(model) {
-        this.include.push({
-            model: model
-        });
+        this.builder.with(model)
         return this
     }
 
     whereHas(model, params) {
-
         this.builder.whereHas(model, params)
-
         return this
-
     }
 
     withScope(param) {
-     this.builder.withScope(param)
+        this.builder.withScope(param)
+    }
+    supportPaginate(params) {
+        this.builder.supportPaginate(params)
+        return this
     }
 }
 

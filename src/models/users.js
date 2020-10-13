@@ -1,5 +1,6 @@
 const sequelize = require('../config/sequelize').sequelize;
 const Sequelize = require('sequelize');
+const Address = require('./Address');
 const Product = require('./Products');
 const User = sequelize.define('user', {
   username: {
@@ -14,6 +15,10 @@ const User = sequelize.define('user', {
 
 User.hasMany(Product, {
   foreignKey: 'user_id'
+})
+
+User.hasMany(Address, {
+  foreignKey: 'user_id',
 })
 
 

@@ -8,6 +8,7 @@ const passport = require('passport');
 const User = require('./models/users');
 const { UserRepository } = require('./app/Repositories/UserRepository');
 const Product = require('./models/Products');
+const UserTranformer = require('./transformers/UserTranformer');
 
 
 
@@ -41,9 +42,13 @@ app.listen(process.env.PORT, () => console.info(`App listening on port ${process
 
 app.get('/checker', async (req, res) => {
   const repository = new UserRepository();
+  const transformer = new UserTranformer.UserTranformer()
   repository.searchQueryParams(req.query);
+  repository.supportPaginate(req.query);
+  repository.includeEntity(req.query);
+  // repository.with(Product)
   const result = await repository.get();
-  res.json(result)
+  res.json(transformer.item())
 })
 
 

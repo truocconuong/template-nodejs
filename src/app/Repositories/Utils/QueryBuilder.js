@@ -13,12 +13,12 @@ class QueryBuilder {
         this.pageSize = 20;
     }
     searchQueryParams(params) {
+        const attributes = this.getColumnModel();
         let queryWhereLike = {
             [Op.or]: []
         };
-        const fieldsNotSearch = ['page', 'pageSize', 'limit']
         for (const param in params) {
-            if (!_.includes(fieldsNotSearch, param)) {
+            if (_.includes(attributes, param)) {
                 const where = {
                     [param]: {
                         [Op.like]: `%${params[param]}%`
@@ -26,14 +26,41 @@ class QueryBuilder {
                 }
                 queryWhereLike[Op.or].push(where)
             }
-            if (_.includes(fieldsNotSearch, param)) {
-                if (!_.isNaN(+params[param])) this[param] = Number(params[param])
-            }
         }
+
         if (!_.isEmpty(queryWhereLike[Op.or])) {
             this.condition.push(queryWhereLike)
         }
+    }
 
+    supportPaginate(params) {
+        const attributes = ['page', 'pageSize', 'limit']
+        for (const param in params) {
+            if (_.includes(attributes, param)) {
+                if (!_.isNaN(+params[param])) this[param] = Number(params[param])
+            }
+        }
+    }
+
+    includeEntity(params) {
+        const attributes = ['include']
+        for (const param in params) {
+            if (_.includes(attributes, param)) {
+           const arrayParam = _.split(params[param],',')
+                for (const isParam of arrayParam) {
+                    eval(`
+                    try {
+                        const ${isParam} = require('../../../models/${isParam}');\n
+                        this.include.push({
+                            model: ${isParam}
+                           });
+                    } catch (error) {
+                        // throw new Error("Filename of entity is incorrect")
+                    }`)
+                }
+                return this
+            }
+        }
     }
 
 
@@ -135,14 +162,21 @@ class QueryBuilder {
     }
     getAllOperators() {
         const params = {
-                include: this.include,
-                condition: this.condition,
-                order: this.order,
-                limit: null,
-                page: this.page,
-                pageSize: this.pageSize
+            include: this.include,
+            condition: this.condition,
+            order: this.order,
+            limit: this.limit,
+            page: this.page,
+            pageSize: this.pageSize
         }
         return params
+    }
+
+    getColumnModel() {
+        const model = new this.model();
+        const columns = [];
+        _.forIn(model.rawAttributes, (value, key) => columns.push(key))
+        return columns
     }
 }
 
